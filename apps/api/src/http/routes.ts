@@ -9,7 +9,7 @@ import { AppError } from "../errors.js";
 import { availableModes, getAgentRun, listAgentRuns, startAgentRun } from "../services/agent/index.js";
 import { inputs, loadSourceRecords } from "../services/inputs.js";
 import { approveVersion, createVersion, diffVersions, getPlan, getVersion, listPlans, rejectVersion } from "../services/plans.js";
-import { dryRun, execute, getRun, getRunRecords, listRuns, listTargetRows, parseFaultInjection, reconcile, rollback } from "../services/runs.js";
+import { dryRun, execute, getRun, getRunRecords, listRuns, listTargetRows, parseFaultInjection, reconcile, rollback, targetSummary } from "../services/runs.js";
 import { resetDemo } from "../services/system.js";
 import { actor, parse } from "./middleware.js";
 
@@ -127,6 +127,8 @@ api.get("/target/rows", async (req, res) => {
   const q = parse(page, req.query);
   res.json(await listTargetRows(q.limit, q.offset));
 });
+
+api.get("/target/summary", async (_req, res) => res.json(await targetSummary()));
 
 api.get("/audit-events", async (req, res) => {
   const q = parse(z.object({ planId: uuid.optional(), limit: z.coerce.number().int().min(1).max(500).default(200) }), req.query);

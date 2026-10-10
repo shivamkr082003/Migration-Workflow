@@ -1,8 +1,8 @@
-import { and, asc, desc, eq, getTableColumns, inArray, ne, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, getTableColumns, inArray, ne, sql } from "drizzle-orm";
 import { planHash, runPlan, type MigrationReport, type TargetRow } from "@mw/core";
 import { config } from "../config.js";
 import { db, type Tx } from "../db/client.js";
-import { recordResults, runs, sourceRecords, targetCustomers } from "../db/schema.js";
+import { planVersions, recordResults, runs, sourceRecords, targetCustomers } from "../db/schema.js";
 import { AppError, conflict, notFound, unprocessable } from "../errors.js";
 import { logger } from "../logger.js";
 import { audit } from "./audit.js";
@@ -376,4 +376,15 @@ export function parseFaultInjection(v: unknown): ExecuteOptions["faultInjection"
   const n = (v as { failAfterRows?: unknown }).failAfterRows;
   if (typeof n !== "number" || !Number.isInteger(n) || n < 1) throw unprocessable("INVALID_FAULT_INJECTION", "failAfterRows must be a positive integer");
   return { failAfterRows: n };
+}
+
+/** Which plan versions currently own rows in the target, so the UI can explain TARGET_HAS_OTHER_LOAD. */
+export async function targetSummary() {
+  const rows = await db
+    .select({ planVersionId: targetCustomers.loadedByPlanVersionId, version: planVersions.version, status: planVersions.status, rows: count() })
+    .from(targetCustomers)
+    .innerJoin(planVersions, eq(planVersions.id, targetCustomers.loadedByPlanVersionId))
+    .groupBy(targetCustomers.loadedByPlanVersionId, planVersions.version, planVersions.status)
+    .orderBy(asc(planVersions.version));
+  return { total: rows.reduce((a, r) => a + r.rows, 0), byVersion: rows };
 }

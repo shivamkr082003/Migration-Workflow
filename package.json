@@ -10,6 +10,10 @@
     "lint": "pnpm -r lint",
     "db:up": "docker compose up -d db",
     "db:migrate": "pnpm --filter api db:migrate",
-    "db:seed": "pnpm --filter api db:seed"
+    "db:seed": "pnpm --filter api db:seed",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0"
   }
 }
