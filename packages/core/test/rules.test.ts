@@ -102,3 +102,19 @@ describe("rules", () => {
     expect(cat.every((r) => typeof r.paramsSchema === "object")).toBe(true);
   });
 });
+
+import { profileField } from "../src/index.js";
+import { records } from "./fixtures.js";
+
+describe("profileField", () => {
+  it("summarises values and shapes deterministically", () => {
+    const p = profileField(records, "signup_dt");
+    expect(p.total).toBe(records.length);
+    expect(p.patterns.map((x) => x.pattern)).toEqual(expect.arrayContaining(["9999-99-99", "99/99/9999", "a 9 9999"]));
+    expect(profileField(records, "signup_dt")).toEqual(p);
+  });
+
+  it("counts blanks", () => {
+    expect(profileField(records, "notes").blank).toBeGreaterThan(0);
+  });
+});
