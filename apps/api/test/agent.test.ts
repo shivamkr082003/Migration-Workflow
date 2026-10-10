@@ -4,7 +4,7 @@ import { config } from "../src/config.js";
 import { agentDeps, startAgentRun } from "../src/services/agent/index.js";
 import { callTool, toolDefinitions } from "../src/services/agent/tools.js";
 import { inputs } from "../src/services/inputs.js";
-import { agentDraft, get, planId, post } from "./helpers.js";
+import { agentDraft, answeredVersion, get, planId, post } from "./helpers.js";
 
 type Block = Record<string, unknown>;
 type Scripted = { stop_reason: string; content: Block[]; stop_details?: unknown };
@@ -80,6 +80,21 @@ describe("heuristic agent", () => {
     const run = (await get(`/plans/${pid}/agent-runs`)).body[0];
     const full = (await get(`/agent-runs/${run.id}`)).body;
     expect(full.trace.map((s: { tool: string }) => s.tool)).toContain("profile_source_field");
+  });
+});
+
+describe("agent revisions", () => {
+  it("carries the reviewer's answers into a heuristic revision", async () => {
+    const pid = await planId();
+    const v1 = await agentDraft(pid);
+    const v2 = await answeredVersion(pid, v1);
+    const { run, done } = await startAgentRun({ planId: pid, actor: "Reviewer", mode: "heuristic", baseVersionId: v2.id });
+    await done;
+    const out = (await get(`/agent-runs/${run.id}`)).body;
+    const v3 = (await get(`/versions/${out.outputVersionId}`)).body;
+    expect(v3.parentVersionId).toBe(v2.id);
+    expect(v3.content.questions.filter((q: { blocking: boolean }) => q.blocking).every((q: { answer: string }) => q.answer === "Confirmed")).toBe(true);
+    expect(v3.issues.filter((i: { severity: string }) => i.severity === "error")).toEqual([]);
   });
 });
 

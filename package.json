@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@11.21.0",
   "scripts": {
-    "setup": "docker compose up -d db && pnpm install && pnpm db:migrate",
+    "bootstrap": "docker compose up -d db && pnpm install && pnpm db:migrate",
     "dev": "pnpm --parallel --filter ./apps/* dev",
     "build": "pnpm --filter web build && pnpm --filter api build",
     "start": "node apps/api/dist/server.js",

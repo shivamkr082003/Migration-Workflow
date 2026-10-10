@@ -29,7 +29,7 @@ An AI agent proposes the field mappings and transformations. A human reviews, ed
 Requirements: Node ≥ 22.9, pnpm, Docker.
 
 ```bash
-pnpm setup        # starts Postgres (port 5433), installs dependencies, runs migrations
+pnpm bootstrap    # starts Postgres (port 5433), installs dependencies, runs migrations
 pnpm dev          # API on :4000, UI on http://localhost:5173
 ```
 
@@ -136,7 +136,7 @@ pnpm test:e2e    # Playwright: generate → answer → dry run → approve → c
 | Suite | Covers |
 |---|---|
 | `packages/core` (45) | Every rule, date ambiguity, money parsing, plan validation codes, hash stability, engine determinism, quarantine evidence, duplicate handling, profiling |
-| `apps/api` (29) | Approval gates, version immutability and diffs, dry-run determinism and evidence queries, crash → retry with no duplicates, reconciliation incl. tamper detection, rollback across attempts, cross-version protection, source-changed refusal, lock contention, audit trail, agent loop against a scripted Claude client (validation feedback, refusal, no-submit), HTTP error contract |
+| `apps/api` (30) | Approval gates, version immutability and diffs, dry-run determinism and evidence queries, crash → retry with no duplicates, reconciliation incl. tamper detection, rollback across attempts, cross-version protection, source-changed refusal, lock contention, audit trail, agent revisions keep reviewer answers, agent loop against a scripted Claude client (validation feedback, refusal, no-submit), HTTP error contract |
 | `apps/web` (6) | Error presentation, status badges, step summaries |
 | `e2e` (1) | The whole journey in a real browser against the production build |
 

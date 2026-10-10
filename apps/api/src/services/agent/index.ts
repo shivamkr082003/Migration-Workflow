@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import type { PlanContent } from "@mw/core";
 import { desc, eq } from "drizzle-orm";
 import { config } from "../../config.js";
 import { db } from "../../db/client.js";
@@ -79,7 +80,7 @@ async function executeAgentRun(runId: string, input: StartAgentInput, mode: Agen
       plan = result.plan;
       usage = result.usage;
     } else {
-      plan = await runHeuristicAgent(ctx, onStep);
+      plan = await runHeuristicAgent(ctx, onStep, basePlan as PlanContent | null);
     }
 
     const version = await createVersion({

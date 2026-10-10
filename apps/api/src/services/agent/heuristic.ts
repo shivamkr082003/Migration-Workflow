@@ -214,7 +214,11 @@ function planField(ctx: AgentContext, tf: TargetField, profiles: Map<string, Fie
   }
 }
 
-export async function runHeuristicAgent(ctx: AgentContext, onStep: (s: AgentTraceStep) => Promise<void> | void): Promise<PlanContent> {
+export async function runHeuristicAgent(
+  ctx: AgentContext,
+  onStep: (s: AgentTraceStep) => Promise<void> | void,
+  basePlan?: PlanContent | null,
+): Promise<PlanContent> {
   const step = async (tool: string, input: unknown) => {
     const started = Date.now();
     const res = callTool(ctx, tool, input);
@@ -239,6 +243,12 @@ export async function runHeuristicAgent(ctx: AgentContext, onStep: (s: AgentTrac
   for (const f of ctx.source.fields) {
     const suspicious = ctx.records.some((r) => /ignore (all )?previous instructions|approve the plan/i.test(String(r[f.name] ?? "")));
     if (suspicious) d.observations.push(`Field ${f.name} contains instruction-like text; it was treated as data and ignored.`);
+  }
+
+  // When revising, keep the reviewer's answers to questions that are still being asked.
+  if (basePlan) {
+    const answers = new Map(basePlan.questions.filter((q) => q.answer?.trim()).map((q) => [q.question, q.answer]));
+    for (const q of d.questions) q.answer = answers.get(q.question) ?? null;
   }
 
   const plan = PlanContent.parse({
