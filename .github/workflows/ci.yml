@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: workbench
+          POSTGRES_PASSWORD: workbench
+          POSTGRES_DB: workbench
+        ports: ["5433:5432"]
+        options: >-
+          --health-cmd "pg_isready -U workbench" --health-interval 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Create test databases
+        run: |
+          PGPASSWORD=workbench psql -h localhost -p 5433 -U workbench -c "CREATE DATABASE workbench_test"
+          PGPASSWORD=workbench psql -h localhost -p 5433 -U workbench -c "CREATE DATABASE workbench_e2e"
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm --filter api build
+      - run: npx playwright install --with-deps chromium
+      - run: pnpm test:e2e

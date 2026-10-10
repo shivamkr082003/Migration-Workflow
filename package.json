@@ -3,17 +3,21 @@
   "private": true,
   "packageManager": "pnpm@11.21.0",
   "scripts": {
+    "setup": "docker compose up -d db && pnpm install && pnpm db:migrate",
     "dev": "pnpm --parallel --filter ./apps/* dev",
-    "build": "pnpm -r build",
-    "test": "pnpm -r test",
+    "build": "pnpm --filter web build && pnpm --filter api build",
+    "start": "node apps/api/dist/server.js",
     "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "test:e2e": "playwright test",
     "db:up": "docker compose up -d db",
     "db:migrate": "pnpm --filter api db:migrate",
-    "db:seed": "pnpm --filter api db:seed",
-    "test:e2e": "playwright test"
+    "records:generate": "node data/generate-records.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0"
+  },
+  "engines": {
+    "node": ">=22.9"
   }
 }

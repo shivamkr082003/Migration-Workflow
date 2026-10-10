@@ -13,5 +13,17 @@ services:
       test: ["CMD-SHELL", "pg_isready -U workbench"]
       interval: 3s
       retries: 10
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://workbench:workbench@db:5432/workbench
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      LOG_LEVEL: info
+    ports:
+      - "4000:4000"
+    profiles: ["app"]
 volumes:
   dbdata:
