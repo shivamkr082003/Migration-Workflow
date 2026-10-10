@@ -1,0 +1,18 @@
+{
+  "entity": "legacy_customers",
+  "description": "Customer export from the legacy CRM. Every column arrives as free text.",
+  "primaryKey": "cust_id",
+  "fields": [
+    { "name": "cust_id", "type": "string", "description": "Legacy customer identifier, e.g. C-1001. Not guaranteed unique in the export." },
+    { "name": "full_name", "type": "string", "description": "Customer name as typed by sales staff. Sometimes 'Last, First'." },
+    { "name": "email_addr", "type": "string", "description": "Primary email, inconsistent casing." },
+    { "name": "phone", "type": "string", "description": "Phone number in mixed local and international formats." },
+    { "name": "signup_dt", "type": "string", "description": "Signup date in several formats (ISO, DD/MM/YYYY, 'Mar 4 2021')." },
+    { "name": "active_flag", "type": "string", "description": "Active status: Y/N, yes/no, 1/0, true/false." },
+    { "name": "country", "type": "string", "description": "Country as free text: codes or names." },
+    { "name": "ltv", "type": "string", "description": "Lifetime value in currency units, may contain '$' and thousands separators." },
+    { "name": "tier", "type": "string", "description": "Loyalty tier label with inconsistent spelling." },
+    { "name": "notes", "type": "string", "description": "Free-text sales notes." },
+    { "name": "legacy_score", "type": "string", "description": "Deprecated internal score (0-100)." }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "entity": "customers_v2",
+  "description": "Normalised customer table in the new platform.",
+  "primaryKey": "customer_id",
+  "fields": [
+    { "name": "customer_id", "type": "string", "required": true, "pattern": "^C-\\d{4,}$", "description": "Stable customer identifier carried over from the legacy system." },
+    { "name": "first_name", "type": "string", "required": true, "maxLength": 50, "description": "Given name." },
+    { "name": "last_name", "type": "string", "required": false, "maxLength": 50, "description": "Family name, null for mononyms." },
+    { "name": "email", "type": "string", "required": true, "format": "email", "maxLength": 254, "description": "Lower-cased primary email." },
+    { "name": "phone_e164", "type": "string", "required": false, "pattern": "^\\+[1-9]\\d{7,14}$", "description": "Phone in E.164 format." },
+    { "name": "signup_date", "type": "date", "required": true, "description": "Signup date (YYYY-MM-DD)." },
+    { "name": "is_active", "type": "boolean", "required": true, "description": "Whether the customer account is active." },
+    { "name": "country_code", "type": "enum", "required": true, "enum": ["IN", "US", "GB", "DE", "SG", "AE", "CA", "AU"], "description": "ISO 3166-1 alpha-2 country code." },
+    { "name": "lifetime_value_cents", "type": "integer", "required": true, "min": 0, "description": "Lifetime value in minor currency units." },
+    { "name": "loyalty_tier", "type": "enum", "required": true, "enum": ["bronze", "silver", "gold", "platinum"], "description": "Normalised loyalty tier." },
+    { "name": "marketing_opt_in", "type": "boolean", "required": true, "description": "Explicit marketing consent. Has no legacy equivalent." }
+  ]
+}
