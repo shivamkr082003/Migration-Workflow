@@ -19,7 +19,6 @@ The build followed a plan-first, step-by-step workflow that I guided at each sta
 During deployment and submission, prompts were short and practical, for example (originally in Hinglish, translated):
 
 - "It's complete now, I need to deploy it. Tell me the steps."
-- "Did a .env file also need to be created for this?"
 - "I don't have an ANTHROPIC_API_KEY, where do I get it?"
 - "Is my work done? This is an assignment I have to submit." (followed by pasting the requirement and submission checklists, to check the project against them)
 
