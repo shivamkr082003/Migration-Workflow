@@ -16,11 +16,22 @@ The build followed a plan-first, step-by-step workflow that I guided at each sta
 3. **Per-step plans:** for each step, I had it write a detailed plan before any code, and reviewed that plan.
 4. **Step-by-step implementation:** I had it implement one step at a time (core engine → API → UI and end-to-end test → Docker, CI and README), guiding and checking each step before moving to the next.
 
-During deployment and submission, prompts were short and practical, for example (originally in Hinglish, translated):
+### Deployment and submission
+
+Deployment was also done step by step: the agent guided, I carried out each step and shared the result (terminal output or a screenshot) before moving on.
+
+1. **Deployment plan:** asked for deployment steps. The agent read the existing `Dockerfile`, `render.yaml` and CI workflow and proposed GitHub → CI → Render Blueprint.
+2. **Push and CI:** I created the GitHub repository and pushed the code myself, then waited for CI (typecheck, all tests, build, e2e) to go green before deploying.
+3. **Render deploy:** deployed through the Render Blueprint, which created the Postgres database and the Docker web service. I shared screenshots at each stage for the agent to check.
+4. **Live verification:** the agent checked `/api/health` and the homepage on the live URL, and I ran the flow in the browser up to the blocking clarification question.
+5. **API key decision:** asked where to get an `ANTHROPIC_API_KEY` and whether a free option existed. I chose to keep the offline planner for the live demo and document it (see below).
+6. **Submission review:** pasted the problem statement and submission checklist and asked the agent to check the project against them. This found the missing `AGENT_USAGE.md` and a stray README line, which were fixed.
+
+Representative prompts from this phase (originally in Hinglish, translated):
 
 - "It's complete now, I need to deploy it. Tell me the steps."
 - "I don't have an ANTHROPIC_API_KEY, where do I get it?"
-- "Is my work done? This is an assignment I have to submit." (followed by pasting the requirement and submission checklists, to check the project against them)
+- "Is my work done? This is an assignment I have to submit."
 
 ## Delegated work
 
