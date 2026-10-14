@@ -181,3 +181,4 @@ The reviewer's name is sent as `x-actor` and recorded on every action.
 
 - **Docker:** `Dockerfile` builds the UI and bundles the API into one image that serves both on port 4000. Migrations run on startup.
 - **Render:** `render.yaml` provisions the web service and a managed Postgres. Set `ANTHROPIC_API_KEY` to enable the Claude agent.
+# Migration-Workflow
