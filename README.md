@@ -1,5 +1,7 @@
 # Migration Workbench
 
+**Live demo:** https://migration-workbench-hork.onrender.com (free tier, the first request may take ~50 s to wake up)
+
 A full-stack tool for planning, validating and safely executing a bounded data migration, here from a legacy CRM export (`legacy_customers`) to a normalised customer table (`customers_v2`).
 
 An AI agent proposes the field mappings and transformations. A human reviews, edits and approves them, and a deterministic engine does the actual work. Every run can be dry-run, retried without duplicates, reconciled against the source, and rolled back. All of it is recorded in an append-only history.
@@ -181,4 +183,4 @@ The reviewer's name is sent as `x-actor` and recorded on every action.
 
 - **Docker:** `Dockerfile` builds the UI and bundles the API into one image that serves both on port 4000. Migrations run on startup.
 - **Render:** `render.yaml` provisions the web service and a managed Postgres. Set `ANTHROPIC_API_KEY` to enable the Claude agent.
-# Migration-Workflow
+- **Live demo:** https://migration-workbench-hork.onrender.com runs without an API key, so it uses the deterministic offline planner (same tools, same review and approval flow). The Claude agent is implemented in `apps/api/src/services/agent/claude.ts` and tested against a scripted client; setting `ANTHROPIC_API_KEY` on the service enables it.
