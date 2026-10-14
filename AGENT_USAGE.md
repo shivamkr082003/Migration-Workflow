@@ -9,9 +9,14 @@ How AI coding agents were used to build this project, and how their output was c
 
 ## Representative prompts
 
-The build was driven mainly by one prompt: the full problem statement for "Agentic Data Migration Planner and Reconciliation Workbench" (provided inputs, agent responsibilities, application requirements, scope limits), given to Claude Code as the spec. The agent planned the architecture and implemented it layer by layer from that spec.
+The build followed a plan-first, step-by-step workflow that I guided at each stage:
 
-Later prompts were short and practical, for example (originally in Hinglish, translated):
+1. **Spec:** I gave Claude Code the full problem statement for "Agentic Data Migration Planner and Reconciliation Workbench" (provided inputs, agent responsibilities, application requirements, scope limits).
+2. **Architecture:** I asked it to lay out the complete architecture as a sequence of steps, with what each step would deliver.
+3. **Per-step plans:** for each step, I had it write a detailed plan before any code, and reviewed that plan.
+4. **Step-by-step implementation:** I had it implement one step at a time (core engine → API → UI and end-to-end test → Docker, CI and README), guiding and checking each step before moving to the next.
+
+During deployment and submission, prompts were short and practical, for example (originally in Hinglish, translated):
 
 - "It's complete now, I need to deploy it. Tell me the steps."
 - "Did a .env file also need to be created for this?"
